@@ -9,7 +9,8 @@ class HypixelStats(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="hypixel", description="Get hypixel stats")
+    @commands.command()
+    @commands.cooldown(20, 60, commands.BucketType.guild)
     async def hypixel(self, ctx, arg1: str = None):
         color = ctx.author.color
         if arg1 is None:
@@ -51,6 +52,11 @@ class HypixelStats(commands.Cog):
         else:
             embed.add_field(name="Guild:", value=guild["name"])
         await ctx.reply(embed=embed)
+
+    @hypixel.error
+    async def check_error(self, ctx, error):
+        if isinstance(error, commands.CommandOnCooldown):
+            await ctx.send(error)
 
 
 def setup(bot):
