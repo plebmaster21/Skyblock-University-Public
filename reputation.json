@@ -1,0 +1,23 @@
+[
+    {
+        "number": 1,
+        "messageid": 957705446410559559,
+        "reason": "good",
+        "authorid": 462940637595959296,
+        "repgiven": 438529479355400194
+    },
+    {
+        "number": 2,
+        "messageid": 957705963190759544,
+        "reason": "bad",
+        "authorid": 438529479355400194,
+        "repgiven": 462940637595959296
+    },
+    {
+        "number": 3,
+        "messageid": 957706011098103869,
+        "reason": "good",
+        "authorid": 462940637595959296,
+        "repgiven": 438529479355400194
+    }
+]
