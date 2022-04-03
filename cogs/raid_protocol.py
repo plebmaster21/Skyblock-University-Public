@@ -1,8 +1,16 @@
 import asyncio
-
 import discord
 from discord.ext import commands
 from discord.utils import get
+
+lockdown_channels = ["general-chat", "irl-help", "birthdays", "masters-general"
+    , "sb-masters-bridge", "masters-bot-commands", "masters-general"
+    , "bot-commands", "verify", "count-to-59mil", "sb-uni-bridge"
+    , "alpha-psi-bridge", "kappa-eta-bridge", "delta-omega-bridge"
+    , "lambda-pi-bridge", "theta-tau-bridge", "rho-xi-bridge"
+    , "skyblock-help-1", "skyblock-help-2", "crafting-and-reforge-assistance"
+    , "essence-trading", "item-lending", "trades-and-auctions", "rep-commands"
+    , "self-advertising", "smp-chat", "community-bulletin-board", "party-finder", "anime-and-manga", "server-donor-chat"]
 
 
 class Raid(commands.Cog, name="raid command"):
@@ -13,14 +21,6 @@ class Raid(commands.Cog, name="raid command"):
     @commands.has_role("Junior Administrator")
     @commands.cooldown(1, 60, commands.BucketType.guild)
     async def crisis(self, ctx):
-        lockdown_channels = ["general-chat", "irl-help", "birthdays", "masters-general"
-            , "sb-masters-bridge", "masters-bot-commands", "masters-general"
-            , "bot-commands", "verify", "count-to-59mil", "sb-uni-bridge"
-            , "alpha-psi-bridge", "kappa-eta-bridge", "delta-omega-bridge"
-            , "lambda-pi-bridge", "theta-tau-bridge", "rho-xi-bridge"
-            , "skyblock-help-1", "skyblock-help-2", "crafting-and-reforge-assistance"
-            , "essence-trading", "item-lending", "trades-and-auctions", "rep-commands"
-            , "self-advertising", "smp-chat", "community-bulletin-board", "party-finder"]
         await ctx.send(":lock: Crisis mode activated. Putting channels under lockdown.")
         for channel in ctx.guild.channels:
             if channel.name in lockdown_channels:
@@ -72,15 +72,8 @@ class Raid(commands.Cog, name="raid command"):
     @commands.has_role("Administrator")
     @commands.cooldown(1, 60, commands.BucketType.guild)
     async def crisisend(self, ctx):
-        lockdown_channels = ["general-chat", "irl-help", "birthdays", "masters-general"
-            , "sb-masters-bridge", "masters-bot-commands", "masters-general"
-            , "bot-commands", "verify", "count-to-59mil", "sb-uni-bridge"
-            , "alpha-psi-bridge", "kappa-eta-bridge", "delta-omega-bridge"
-            , "lambda-pi-bridge", "theta-tau-bridge", "rho-xi-bridge"
-            , "skyblock-help-1", "skyblock-help-2", "crafting-and-reforge-assistance"
-            , "essence-trading", "item-lending", "trades-and-auctions", "rep-commands"
-            , "self-advertising", "smp-chat", "community-bulletin-board", "party-finder"]
-        await ctx.send(":unlock: Crisis mode ended. Remove channels from under lockdown.")
+
+        await ctx.send(":unlock: Crisis mode ended. Removing channels from under lockdown.")
         for channel in ctx.guild.channels:
             if channel.name in lockdown_channels:
                 if channel.overwrites[ctx.guild.default_role].send_messages == True or channel.overwrites[
@@ -112,7 +105,6 @@ class Raid(commands.Cog, name="raid command"):
         raidmode.add_field(name="How many channels unlocked", value=f"{length}", inline=False)
         raidmode.add_field(name="Errors unlocking Channels", value=f"None", inline=False)
         await channel.send(embed=raidmode)
-
 
     @crisisend.error
     async def check_error(self, ctx, error):
