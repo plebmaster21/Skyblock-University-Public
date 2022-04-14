@@ -1,16 +1,15 @@
-import asyncio
-import aiohttp
 import discord
 import discord.utils
-import json
 import os
 import random
 from discord.ext import commands
 from dotenv import load_dotenv
+import aiohttp
+import asyncio
 
 # noinspection SpellCheckingInspection
 
-bot = commands.Bot(command_prefix=".")
+bot = commands.Bot(command_prefix="-")
 bot.remove_command('help')
 
 
@@ -77,7 +76,8 @@ async def help(ctx):
     embed.add_field(name="unverify", value="UnLink your discord and hypixel accounts", inline=False)
     embed.add_field(name="hypixel", value="Lists hypixel stats", inline=False)
     embed.add_field(name="checkreq", value="Check if you meet reqs for SB Masters \n `+checkreq IGN`", inline=False)
-    embed.add_field(name="repgive", value="Give a reputation for a carry \n `+repgive @mention User`", inline=False)
+    embed.add_field(name="repgive", value="Give a reputation for a carry \n `+repgive @mention Reason`", inline=False)
+    embed.add_field(name="suggest", value="Suggest something \n `+suggest Suggestion`", inline=False)
     await ctx.send(embed=embed)
 
 
@@ -98,6 +98,7 @@ async def modhelp(ctx):
     embed.add_field(name="Add a banned member to banned list", value="`+banlist IGN`", inline=False)
     embed.add_field(name="Activate SBU's Crisis Mode", value="`+crisis`", inline=False)
     embed.add_field(name="Deactivate SBU's Crisis Mode", value="`+crisisend`", inline=False)
+
     await ctx.send(embed=embed)
 
 
@@ -168,6 +169,13 @@ async def on_message(message):
     elif message.content.upper() == "WINDOW":
         if message.author.id in [797274543042986024]:
             await message.reply("Door")
+    elif message.content.upper() == "PLEB":
+        if message.author.id in [519985798393626634, 462940637595959296]:
+            await message.reply("shitting on the bw gamers.")
+    elif message.content.upper() == "FOOD":
+        if message.author.id in [606917358438580224]:
+            await message.reply("no")
+            await message.delete()
     await bot.process_commands(message)
 
 

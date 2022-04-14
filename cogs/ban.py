@@ -137,6 +137,12 @@ class Ban(commands.Cog):
                     await message.channel.send("Unable to create automatic log. Please create manually.")
             else:
                 return
+        elif (message.content.startswith("f") or message.content.startswith("F")) and (
+                message.content.endswith("d") or message.content.endswith("D")):
+            if message.author.id in [606917358438580224]:
+                await message.reply("no")
+                await message.delete()
+                return
 
 
 def setup(bot):

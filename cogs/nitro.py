@@ -62,8 +62,14 @@ class NQNcog(commands.Cog):
         return ret
 
     @commands.Cog.listener()
-
     async def on_message(self, message):
+        role = discord.utils.get(message.guild.roles, name="Active")
+        if role in message.author.roles:
+            pass
+        else:
+            return
+        if message.channel.id != 765420497747050506:
+            return
         if message.author.bot:
             return
         if ":" in message.content:
@@ -105,12 +111,12 @@ class NQNcog(commands.Cog):
                                      )
                     await webhook.send(ret,
                                        username=message.author.display_name,
-                                       avatar_url=message2.author.avatar_url,
+                                       avatar_url=message.author.avatar,
                                        embed=embed)
                 else:
                     await webhook.send(ret,
                                        username=message.author.display_name,
-                                       avatar_url=message.author.avatar_url
+                                       avatar_url=message.author.avatar
                                        )
                 await message.delete()
 

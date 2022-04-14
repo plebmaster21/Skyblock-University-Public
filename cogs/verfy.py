@@ -37,46 +37,56 @@ class Verify(commands.Cog):
         response = requests.get(f'https://api.slothpixel.me/api/players/{arg1}')
         if response.status_code != 200:
             embed = discord.Embed(title=f'Error',
-                                      description='Error fetching information from the API. Try again later',
-                                      colour=0xFF0000)
+                                  description='Error fetching information from the API. Try again later',
+                                  colour=0xFF0000)
             await ctx.reply(embed=embed)
             return
         player = response.json()
         response = requests.get(f'https://api.slothpixel.me/api/guilds/{arg1}')
         guild = response.json()
+        check = False
         if response.status_code != 200 and guild["guild"] is not None:
             embed = discord.Embed(title=f'Error',
-                                      description='Error fetching information from the API. Try again later',
-                                      colour=0xFF0000)
+                                  description='Error fetching information from the API. Try again later',
+                                  colour=0xFF0000)
+            await ctx.reply(embed=embed)
+            return
+        if "error" in guild or guild["guild"] is None:
+            embed = discord.Embed(title=f'Error',
+                                  description='User is not in any guild. Verification canceled',
+                                  colour=0xFF0000)
             await ctx.reply(embed=embed)
             return
         if player['links']['DISCORD'] == str(ctx.author):
             pass
         else:
             embed = discord.Embed(title=f'Error',
-                                      description='The discord linked with your hypixel account is not the same as '
-                                                  'the one you are trying to verify with. \n You can connect your '
-                                                  'discord following https://youtu.be/6ZXaZ-chzWI',
-                                      colour=0xFF0000)
+                                  description='The discord linked with your hypixel account is not the same as '
+                                              'the one you are trying to verify with. \n You can connect your '
+                                              'discord following https://youtu.be/6ZXaZ-chzWI',
+                                  colour=0xFF0000)
             await ctx.reply(embed=embed)
             return
         if guild["name"] in ["SB Lambda Pi", "SB Theta Tau", "SB Delta Omega", "SB Iota Theta",
-                                 "SB Uni", "SB Rho Xi", "SB Kappa Eta", "SB Alpha Psi", "SB Masters"]:
+                             "SB Uni", "SB Rho Xi", "SB Kappa Eta", "SB Alpha Psi", "SB Masters"]:
+            check = True
             pass
         else:
             embed = discord.Embed(title=f'Verification',
-                                      description='You are not in any of the SBU guilds. You are now verified without '
-                                                  'the guild member roles.',
-                                      colour=0x800080)
+                                  description='You are not in any of the SBU guilds. You are now verified without '
+                                              'the guild member roles.',
+                                  colour=0x800080)
+        temp = False
         if guild["name"] == "SB Uni":
+            temp = True
             guildrole = "SB University Member"
             embed = discord.Embed(title=f'Verification',
-                                      description=f'You have been verified as a member of {guild["name"]}',
-                                      colour=0x008000)
-        else:
+                                  description=f'You have been verified as a member of {guild["name"]}',
+                                  colour=0x008000)
+        if check and temp != True:
             embed = discord.Embed(title=f'Verification',
-                                      description=f'You have been verified as a member of {guild["name"]}',
-                                      colour=0x008000)
+                                  description=f'You have been verified as a member of {guild["name"]}',
+                                  colour=0x008000)
             guildrole = guild["name"] + " Member"
         conn = psycopg2.connect(
             host=hostname,
@@ -102,10 +112,12 @@ class Verify(commands.Cog):
         elif player["rank"] == "MVP":
             rankrole = get(member.guild.roles, name="MVP")
             await member.add_roles(rankrole)
-        role2 = get(member.guild.roles, name=guildrole)
+        if check:
+            role2 = get(member.guild.roles, name=guildrole)
+            await member.add_roles(role1)
+            await member.add_roles(role2)
         await member.add_roles(role)
-        await member.add_roles(role1)
-        await member.add_roles(role2)
+
         deleteid = "'" + str(ctx.author.id) + "'"
         delete_script = f'DELETE FROM verified WHERE id={deleteid}'
         cur.execute(delete_script)
