@@ -91,7 +91,7 @@ async def modhelp(ctx):
     )
     embed.set_footer(text='SBU Custom Bot')
     embed.add_field(name="ban", value="`+ban User Reason`", inline=False)
-    embed.add_field(name="mut`", value="`+mute User Time Reason`", inline=False)
+    embed.add_field(name="mute", value="`+mute User Time Reason`", inline=False)
     embed.add_field(name="unmute", value="`+unmute User Reason`", inline=False)
     embed.add_field(name="Lookup section for Rank Academy ", value="`+lookupsection`", inline=False)
     embed.add_field(name="Shortened questions for promo for Instr and higher", value="`+ras`", inline=False)
@@ -176,6 +176,37 @@ async def on_message(message):
         if message.author.id in [606917358438580224]:
             await message.reply("no")
             await message.delete()
+    elif message.content.upper() == "THUNDXR":
+        if message.author.id in [694604709591384226]:
+            list = ["huh?",
+                    "stop annoying me smh",
+                    "bad at coding",
+                    "good at coding",
+                    "edited me",
+                    "hacks ppl hehe",
+                    "stop looking at me",
+                    "is hot",
+                    "is nice",
+                    "what?",
+                    "ITHUNDXR!!!!!",
+                    "IThundxr",
+                    "why?",
+                    "Grinds alot",
+                    "where?",
+                    "HOW?",
+                    "no",
+                    "no.",
+                    "NO",
+                    "No.",
+                    "shut up",
+                    "codes alot",
+                    "Minecraft.",
+                    "oooh you found the special response that does legit nothing. cool?",
+                    "wow",
+                    "is ~~kinda~~ very mean",
+                    "lol"]
+            randommessage = random.sample(range(0, len(list)), 1)
+            await message.reply(list[randommessage[0]])
     await bot.process_commands(message)
 
 
