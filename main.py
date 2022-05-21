@@ -86,7 +86,7 @@ async def help(ctx):
 async def modhelp(ctx):
     embed = discord.Embed(
         title='Moderation Commands',
-        description='All the moderation commands are listed below',
+        description='All the moderation commands are     listed below',
         colour=discord.Colour.red()
     )
     embed.set_footer(text='SBU Custom Bot')
@@ -138,31 +138,6 @@ async def on_message(message):
     elif message.content.upper() == "NEO":
         if message.author.id in [566329261535920175]:
             await message.reply("op")
-    elif message.content.upper() == "OBBY":
-        if message.author.id in [699769343344377916]:
-            await message.reply(
-                "https://cdn.discordapp.com/attachments/910303971187507210/954606327970295828/unknown.png")
-    elif message.content.upper() == "WYVTRUSTY":
-        if message.author.id in [699769343344377916, 462940637595959296]:
-            list = ["https://cdn.discordapp.com/attachments/910303971187507210/954606120255758386/unknown.png",
-                    "https://cdn.discordapp.com/attachments/910303971187507210/954606120528408616/unknown.png",
-                    "https://cdn.discordapp.com/attachments/910303971187507210/954606120876523520/unknown.png",
-                    "https://cdn.discordapp.com/attachments/910303971187507210/954606121157529610/unknown.png",
-                    "https://cdn.discordapp.com/attachments/910303971187507210/954606121467932712/unknown.png",
-                    "https://cdn.discordapp.com/attachments/910303971187507210/954606121761521714/unknown.png",
-                    "https://cdn.discordapp.com/attachments/910303971187507210/954606121971224646/unknown.png",
-                    "https://cdn.discordapp.com/attachments/910303971187507210/954606122172579870/unknown.png",
-                    "https://cdn.discordapp.com/attachments/910303971187507210/954606122390679602/unknown.png",
-                    "https://cdn.discordapp.com/attachments/910303971187507210/954606122575212554/unknown.png",
-                    "https://cdn.discordapp.com/attachments/910303971187507210/954606208453574686/unknown.png",
-                    "https://cdn.discordapp.com/attachments/910303971187507210/954606208713633802/unknown.png",
-                    "https://cdn.discordapp.com/attachments/910303971187507210/954606208894001162/unknown.png",
-                    "https://cdn.discordapp.com/attachments/910303971187507210/954606209237917696/unknown.png",
-                    "https://cdn.discordapp.com/attachments/910303971187507210/954606209535721492/unknown.png",
-                    "https://cdn.discordapp.com/attachments/910303971187507210/954606209929982002/unknown.png",
-                    "https://cdn.discordapp.com/attachments/910303971187507210/954606210269741066/unknown.png"]
-            randommessage = random.sample(range(0, len(list)), 1)
-            await message.reply(list[randommessage[0]])
     elif message.content.upper() == "SLOGO":
         if message.author.id in [354741702004703242]:
             await message.reply("Op Ironman")
@@ -181,9 +156,7 @@ async def on_message(message):
             list = ["huh?",
                     "stop annoying me smh",
                     "bad at coding",
-                    "good at coding",
                     "edited me",
-                    "hacks ppl hehe",
                     "stop looking at me",
                     "is hot",
                     "is nice",
@@ -191,7 +164,6 @@ async def on_message(message):
                     "ITHUNDXR!!!!!",
                     "IThundxr",
                     "why?",
-                    "Grinds alot",
                     "where?",
                     "HOW?",
                     "no",
