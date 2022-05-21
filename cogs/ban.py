@@ -11,22 +11,63 @@ class Ban(commands.Cog):
         self.bot = bot
 
     @commands.command()
+    async def banping(self, ctx):
+        await ctx.send(f'Pong! {round(self.bot.latency * 1000)} ms')
+
+    @commands.command()
     @commands.has_permissions(ban_members=True)
-    async def ban(self, ctx, member: discord.Member, *, reason=None):
+    async def ban(self, ctx, member, *, reason=None):
+        member = member.replace("<", "")
+        member = member.replace("@", "")
+        member = member.replace(">", "")
+        user = await self.bot.get_or_fetch_user(member)
         try:
-            await member.send("You have been banned from SBU for " + reason)
-            await member.send(r"Appeal at https://discord.gg/mn6kJrJuVB")
+            await user.send("You have been banned from SBU for " + reason)
+            await user.send(r"Appeal at https://discord.gg/mn6kJrJuVB")
         except:
             await ctx.send("User cannot be dmed")
-        await member.ban(delete_message_days=0, reason=reason)
+        try:
+            await ctx.guild.ban(user=user, delete_message_days=0, reason=reason)
+        except:
+            embedVar = discord.Embed(description=":x: Bot does not have permission to ban this member.")
+            await ctx.reply(embed=embedVar)
+            return
         channel = self.bot.get_channel(823938991345893417)
         author = str(ctx.message.author.id)
-        await channel.send(f"Moderator: <@{author}> \n User: <@{member.id}> \n Action: Ban \n Reason: {reason}")
-        await ctx.send("User banned, log created")
+        message = f"Moderator: <@{author}> \n User: <@{user.id}> | {user} \n Action: Ban \n Reason: {reason}"
+        await channel.send(message)
+        embedVar = discord.Embed(description=f"Moderator: <@{author}> \nUser: {user} "
+                                             f"\nAction: Ban \nReason: {reason}")
+        await ctx.send(embed=embedVar)
         channel = self.bot.get_channel(946591422616838264)
         await channel.send(f"Ban command ran by <@{author}>")
 
     @ban.error
+    async def check_error(self, ctx, error):
+        if isinstance(error, commands.MissingPermissions):
+            await ctx.send("Insufficient Permissions")
+
+    @commands.command()
+    @commands.has_permissions(ban_members=True)
+    async def unban(self, ctx, member, *, reason=None):
+        user = await self.bot.get_or_fetch_user(member)
+        author = str(ctx.author.id)
+        channel = self.bot.get_channel(823938991345893417)
+        try:
+            await ctx.guild.unban(user=user, reason=reason)
+        except:
+            embedVar = discord.Embed(description=":x: Bot does not have permission to unban this member.")
+            await ctx.reply(embed=embedVar)
+            return
+        message = f"Moderator: <@{author}> \n User: <@{user.id}> | {user} \n Action: UnBan \n Reason: {reason}"
+        await channel.send(message)
+        embedVar = discord.Embed(description=f"Moderator: <@{author}> \nUser: {user} "
+                                             f"\nAction: UnBan \nReason: {reason}")
+        await ctx.send(embed=embedVar)
+        channel = self.bot.get_channel(946591422616838264)
+        await channel.send(f"UnBan command ran by <@{author}>")
+
+    @unban.error
     async def check_error(self, ctx, error):
         if isinstance(error, commands.MissingPermissions):
             await ctx.send("Insufficient Permissions")
@@ -78,10 +119,12 @@ class Ban(commands.Cog):
             await ctx.send("Please specify a user to mute `+mute @mention Time Reason`")
             return
         await member.timeout(until=discord.utils.utcnow() + datetime.timedelta(seconds=time), reason=reason)
-        await ctx.send(f"{member.mention} has been muted for {time} | Reason {reason}")
+        conversion = datetime.timedelta(seconds=time)
+        await ctx.send(f"{member.mention} has been muted for {conversion} | Reason {reason}")
         channel = self.bot.get_channel(823938991345893417)
         author = str(ctx.message.author.id)
-        await channel.send(f"Moderator: <@{author}> \n User: <@{member.id}> \n Action: Mute \n Reason: {reason}")
+        await channel.send(
+            f"Moderator: <@{author}> \n User: <@{member.id}> \n Action: Mute \n Time: {conversion} \n Reason: {reason}")
         await ctx.send("Log created")
         channel = self.bot.get_channel(946591422616838264)
         await channel.send(f"Mute command ran by <@{author}>")
@@ -136,12 +179,6 @@ class Ban(commands.Cog):
                 except:
                     await message.channel.send("Unable to create automatic log. Please create manually.")
             else:
-                return
-        elif (message.content.startswith("f") or message.content.startswith("F")) and (
-                message.content.endswith("d") or message.content.endswith("D")):
-            if message.author.id in [606917358438580224]:
-                await message.reply("no")
-                await message.delete()
                 return
 
 

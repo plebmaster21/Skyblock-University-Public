@@ -8,8 +8,8 @@ import aiohttp
 import asyncio
 
 # noinspection SpellCheckingInspection
-
-bot = commands.Bot(command_prefix="-")
+intents = discord.Intents.all()
+bot = commands.Bot(command_prefix="-", intents=intents)
 bot.remove_command('help')
 
 

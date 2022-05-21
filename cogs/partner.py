@@ -39,7 +39,7 @@ Benefits of joining:
 🎅 Amazing Staff Members who are Super Active!
 🧑‍🤝‍🧑 Great Community with Friendly Users!
 🤖 Channels and Bots"""
-sfs= """
+sfs = """
 Welcome to Silent's Free Services!
 ---------------------------------------------------------------------------------------------------------------
 What do we offer?
@@ -53,7 +53,7 @@ What do we offer?
 :tada: Giveaways at least once per week
 ----------------------------------------------------------------------------------------------------------------
 """
-sfs2=""":crossed_swords: FREE slayer carries! T5s might be tricky for one person, but why else do we have a community?
+sfs2 = """:crossed_swords: FREE slayer carries! T5s might be tricky for one person, but why else do we have a community?
 ---------------------------------------------------------------------------------------------------------------
 :wowfox: Contribution rewards for helping others. For the welfare of the community!
 ----------------------------------------------------------------------------------------------------------------
@@ -124,6 +124,26 @@ Aether Network is a Minecraft centred server based on SkyBlock, Hypixel game mod
 Originally as a Hypixel Skyblock server, we offer dungeon carry services and coin giveaways! After branching out, we offer a custom-coded SMP, guild events, pvp tournaments, and other sorts of nitro and prize giveaways!
 
 Interested? Join Today!"""
+
+stellular = """:tools: **Stellular **
+
+**A little bit about us: ─━═༻ **
+◈  Looking for a friendly discord server? Well, you're in great luck! Stellular is a discord server open to the community! 
+◈ Stellular is a growing community and will be full of activities and events, and the community will be as nice as it can get.
+
+**What we offer: ─━═༻**
+◈ :moneybag: Weekly giveaways for prizes such as Skyblock coins, nitro, ranks, and cosmetics!
+◈ :calendar: Regular events for a chance to win prizes! 
+◈ :robot: Tons of popular Discord bots to use!
+◈ :scream: A Hypixel guild with 50+ Levels 
+◈ :smiley: Partnerships with other servers 
+◈ :heart: An active non-toxic community! 
+
+**Our details ─━═༻**
+:flag_white: Banner: https://share.creavite.co/CBnEStefegN5hB8W.gif
+:red_circle: Pings:"""
+
+
 class Partner(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -132,7 +152,7 @@ class Partner(commands.Cog):
     async def partner(self, ctx):
         if ctx.message.author.id in [462940637595959296, 438529479355400194, 397389995113185293, 665885831856128001]:
             partnership = discord.Embed(
-                title=f'SkyKings',
+                title=f'Stellular',
                 description='',
                 colour=discord.Colour.dark_gray()
             )
@@ -146,9 +166,9 @@ SkyKings is a guild networth of 9 guilds, with many activities!
 
 Join today! """
             partnership.set_footer(text='SBU Partners')
-            partnership.add_field(name="\u200b", value=f"{skykings}", inline=False)
+            partnership.add_field(name="\u200b", value=f"{stellular}", inline=False)
             await ctx.send(embed=partnership)
-            temp = f"Discord Invite: discord.gg/skykings"
+            temp = f"Discord Invite: https://discord.gg/stellular"
             await ctx.send(temp)
 
 

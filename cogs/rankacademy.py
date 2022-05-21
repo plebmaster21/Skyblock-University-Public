@@ -228,11 +228,11 @@ tutoring1.add_field(name="Thank you", value=tutor2, inline=False)
 tutoring1.add_field(name="The End", value=done1, inline=False)
 
 lookuplist = ["shachi", "Rvon", "ItsFijit", "someonestolemypc", "jpgaming55", "LordZarach",
-              "Skeldow", "ImaSimp4U", "LavenderHeights", "MartinNemi03", "69m_", "zStrelizia",
-              "Adviceful", "Zykm", "Muffinio", "WrappingChart31", "FantasmicGalaxy", "Smawl_Ninja"
-    , "Iwolf05", "__saltt", "luvanion", "Thesensational18", "43110s", "dukioooo", "CoruptKun"
-    , "Teunman", "302q", "Furiousmatt", "jexh", "Royalist", "McMuffinLover", "o600", "jjww2", "Dromzie"
-    , "LeaPhant", "gxth__", "MedalAinz", "ih8grinding", "sumgoodvibess", "metalcupcake5", "Legendofhub"
+              "Skeldow", "AvidYodaMain", "LavenderHeights", "MartinNemi03", "69mn", "zStrelizia",
+              "Adviceful", "Zykm", "russiandeniss", "wr4pp1ng", "FantasmicGalaxy", "urra"
+    , "Iwolf05", "noscope_", "luvanion", "Thesensational18", "43110s", "dukioooo", "CoruptKun"
+    , "Teunman", "302q", "Furiousmatt", "jexh", "Royalist", "McMuffinLover", "o600", "jjww2", "n0twanted"
+    , "yuricamp", "gxth__", "Yarnzy_", "ih8grinding", "sumgoodvibess", "metalcupcake5", "Legendofhub"
     , "Spectrov", "_YungGravy", "wigner", "Trinitro480"]
 lookuplistans = ["Scammer", "Scammer", "Not Scammer", "Scammer", "Scammer", "Not Scammer", "Scammer", "Scammer",
                  "Scammer"
@@ -262,7 +262,7 @@ IvoryUntrusty: that’s not nice…""",
               TheHolyBonk: yo anyone want some enchanted quartz blocks for 1.2m?
               BlueCow03: sure visit me
               TheHolyBonk: cool
-              
+
               TheHolyBonk has left the guild
               BlueCow03: NO
               StanTheStonk3069: F
@@ -287,12 +287,12 @@ IvoryUntrusty: that’s not nice…""",
               """DogeLover4: Hyperion on my ah!!!
               AmericanDove07: pog
               DogeLover4: ./ah DogeLover4
-              
+
               DogeLover4: still got a hype on my ah! /ah DogeLover4
               AmericanDove07: I’m too poor
               DogeLover4: Imagine
               DogeLover4: peasant
-              
+
               DogeLover4: ./ah DogeLover4 still got the Hyperion up""",
               """Flylit: how’s everyone’s day going?
               FootRaider27: stfu
@@ -478,7 +478,7 @@ class RA(commands.Cog):
     @commands.has_permissions(ban_members=True)
     async def lookupsection(self, ctx):
         length = len(lookuplist)
-        randomlist = random.sample(range(0, length), 10)
+        randomlist = random.sample(range(0, length), 9)
         channel = self.bot.get_channel(883539648754892910)
         channelid = ctx.channel.id
         questions = discord.Embed(
