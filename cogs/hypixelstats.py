@@ -2,7 +2,7 @@ import discord
 import discord.utils
 from discord.ext import commands
 import requests
-
+import os
 
 class HypixelStats(commands.Cog):
 

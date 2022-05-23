@@ -147,10 +147,6 @@ async def on_message(message):
     elif message.content.upper() == "PLEB":
         if message.author.id in [519985798393626634, 462940637595959296]:
             await message.reply("shitting on the bw gamers.")
-    elif message.content.upper() == "FOOD":
-        if message.author.id in [606917358438580224]:
-            await message.reply("no")
-            await message.delete()
     elif message.content.upper() == "THUNDXR":
         if message.author.id in [694604709591384226]:
             list = ["huh?",
