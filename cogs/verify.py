@@ -27,7 +27,7 @@ class Verify(commands.Cog):
         key = os.getenv("apikey")
         if arg1 is None:
             embed = discord.Embed(title=f'Error', description='Please enter a user \n `+verify ObbyTrusty`',
-                                  colour=0xFF0000)
+                                colour=0xFF0000)
             await ctx.reply(embed=embed)
             return
         member = ctx.message.author
@@ -40,9 +40,9 @@ class Verify(commands.Cog):
         except KeyError as e:
             print(e)
             embed = discord.Embed(title=f'Error',
-                                  description='Error fetching information from the API. Recheck the spelling of your '
-                                              'IGN',
-                                  colour=0xFF0000)
+                                description='Error fetching information from the API. Recheck the spelling of your '
+                                            'IGN',
+                                colour=0xFF0000)
             await ctx.reply(embed=embed)
             return
         for role1 in ["SB Lambda Pi Member", "SB Theta Tau Member", "SB Delta Omega Member", "SB Iota Theta Member",

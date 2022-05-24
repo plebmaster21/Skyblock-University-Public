@@ -29,6 +29,16 @@ class Pat(commands.Cog):
         elif isinstance(error, commands.CommandOnCooldown):
             await ctx.send(error)
 
-
+    @commands.command()
+    async def convert(self, ctx, value : str):
+        temp = int(value[:-1])
+        if value[-1].upper() == 'C':
+            fahrenheit = (temp * 9/5) + 32
+            await ctx.send(f'{temp} celcius is {round(fahrenheit,2)} in fahrenheit.')
+        elif value[-1].upper() == 'F':
+            celsius = (temp - 32) * 5/9
+            await ctx.send(f'{temp} fahrenheit is {round(celsius,2)} in celsius.')
+        else:
+            await ctx.send(f'Input values as `+convert 200f` to convert 200 fahrenheit to celsius')
 def setup(bot):
     bot.add_cog(Pat(bot))
