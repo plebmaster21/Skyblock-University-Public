@@ -24,18 +24,15 @@ class GEXP(commands.Cog):
         key = os.getenv("apikey")
         topearnersgexp = []
         topearnersuuid = []
-        dates = []
         for guild in guilds:
             data = requests.get(f'https://api.hypixel.net/guild?key={key}&id={guild}').json()
-            for i in range(7):
-                date = (datetime.datetime.now() - datetime.timedelta(days=i)).date()
-                dates.append(str(date))
-            for players in data['guild']['members']:
-                totalgexp = 0
-                for datetocheck in dates:
-                    totalgexp = totalgexp + players['expHistory'][datetocheck]
-                    topearnersgexp.append(totalgexp)
-                    topearnersuuid.append(players['uuid'])
+            for i in data["guild"]["members"]:
+                total = 0
+                for i2 in i["expHistory"]:
+                    total += i["expHistory"][i2]
+                uuid = i["uuid"]
+                topearnersgexp.append(total)
+                topearnersuuid.append(uuid)
 
         topearnersgexp, topearnersuuid = (list(t) for t in zip(*sorted(zip(topearnersgexp, topearnersuuid))))    
         temp = []

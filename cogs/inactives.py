@@ -2,20 +2,27 @@ import discord
 from discord.ext import commands
 from discord.utils import get
 import requests
-import datetime
 import time
 import dotenv
 import os
+import sqlite3
 
 
 class GuildInactiveCheck(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+
     @commands.command()
     @commands.cooldown(1, 60)
     async def inactive(self, ctx, *,guild = None):
-        
+        conn = sqlite3.connect('inactive.db')
+        c = conn.cursor()   
+        c.execute('''SELECT * FROM inactives''')
+        values = c.fetchall()
+        valuecheck = []
+        for value in values:
+            valuecheck.append(value[1])
         if guild == None:
             embedVar = discord.Embed(color=ctx.author.color,
                         description=f"No guild inputted, `+inactive GUILD`")
@@ -43,27 +50,40 @@ class GuildInactiveCheck(commands.Cog):
         if data["guild"] is not None:
             embedmsg = ""
             totalmembers = 0
-
+            ManualCheck = []
             for i in data["guild"]["members"]:
                 total = 0
                 for i2 in i["expHistory"]:
                     total += i["expHistory"][i2]
                 uuid = i["uuid"]
                 if total <= int(amount):
-                    data2 = requests.get(
-                    url=f"https://api.mojang.com/user/profile/{uuid}").json()
-                    username = data2["name"]
-                    embedmsg += f"{username}\n"
-                    totalmembers += 1
+                    data2 = requests.get(f"https://api.hypixel.net/player/key?={key}&uuid={uuid}").json()
+                    try:
+                        LastLogout = (data2["player"]["lastLogout"])/1000
+                        checktime = (time.mktime(time.gmtime()))-604800
+                    except:
+                        LastLogout = "User is a dummy who makes my life harder"
+                        checktime = ""
+                    if LastLogout < checktime or LastLogout=="User is a dummy who makes my life harder":
+                        data3 = requests.get(url=f"https://api.mojang.com/user/profile/{uuid}").json()
+                        if uuid in valuecheck:
+                            pass
+                        else:
+                            username = data3["name"]
+                            if username in ['MastersBridge','RhoXiBridge','ThetaTauBridge','LambdaPiBridg',
+                                        'DeltaOmegaBridge','KappaEtasBridge','AlphaPsisBridge','UniversityBot']:
+                                pass
+                            else:
+                                ManualCheck.append(username)
+                                embedmsg += f"{username}\n"
+                                totalmembers += 1
             embedVar = discord.Embed(color=ctx.author.color, title=f"Inactive List for {data['guild']['name']}",
                                         description=f"{totalmembers} members were found to be under {amount} GEXP." + f"\n\n{embedmsg}")
             await message.edit(embed=embedVar)
-                    
+        conn.close()
     @inactive.error
     async def check_error(self, ctx, error):
-        if isinstance(error, commands.MissingRole):
-            await ctx.send("Insufficient Permissions, only moderators can use this command.")
-        elif isinstance(error, commands.CommandOnCooldown):
+        if isinstance(error, commands.CommandOnCooldown):
             await ctx.send(error)
 
 

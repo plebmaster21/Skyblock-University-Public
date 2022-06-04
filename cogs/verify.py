@@ -2,11 +2,11 @@ import asyncio
 import discord
 import psycopg2
 import psycopg2.extras
-from discord.ext import commands
+from discord.ext import commands, tasks
 from discord.utils import get
 import requests
 import os
-
+import sqlite3
 
 
 hostname = 'localhost'
@@ -15,13 +15,43 @@ username = 'postgres'
 pwd = 'obbytrusty'
 port_id = 5432
 
-insert_script = 'INSERT INTO VERIFIED (id, uuid, guild) VALUES (%s, %s, %s)'
 
 
 class Verify(commands.Cog):
     def __init__(self, bot):
+        self.index = 0
         self.bot = bot
-
+        self.checkverification.start()
+        
+    def cog_unload(self):
+        self.checkverification.cancel()
+    
+    @tasks.loop(hours=24)
+    async def checkverification(self):
+        conn = sqlite3.connect('verify.db')
+        c = conn.cursor()
+        c.execute('SELECT * FROM VERIFIED')
+        values = c.fetchall()
+        
+        
+        
+    @checkverification.before_loop
+    async def before_checkverification(self):
+        await self.bot.wait_until_ready()
+        
+    @commands.Cog.listener()
+    async def on_ready(self):
+        conn = sqlite3.connect('verify.db')
+        c = conn.cursor()   
+        c.execute("""CREATE TABLE IF NOT EXISTS verified (
+            discordid integer,
+            uuid text,
+            guild text
+        )""")
+        conn.commit()
+        conn.close()
+        print(f'SQLite Verification databases initialized')
+    
     @commands.command(description="Add the role if in guild")
     async def verify(self, ctx, arg1: str = None):
         key = os.getenv("apikey")
@@ -46,8 +76,8 @@ class Verify(commands.Cog):
             await ctx.reply(embed=embed)
             return
         for role1 in ["SB Lambda Pi Member", "SB Theta Tau Member", "SB Delta Omega Member", "SB Iota Theta Member",
-                      "SB University Member", "SB Rho Xi Member", "SB Kappa Eta Member", "SB Alpha Psi Member",
-                      "SB Masters Member"]:
+                    "SB University Member", "SB Rho Xi Member", "SB Kappa Eta Member", "SB Alpha Psi Member",
+                    "SB Masters Member"]:
 
             role = discord.utils.get(ctx.guild.roles, name=role1)
             if role in member.roles:
@@ -55,8 +85,8 @@ class Verify(commands.Cog):
         response = requests.get(f'https://api.hypixel.net/player?key={key}&uuid={uuid}')
         if response.status_code != 200:
             embed = discord.Embed(title=f'Error',
-                                  description='Error fetching information from the API. Try again later',
-                                  colour=0xFF0000)
+                                description='Error fetching information from the API. Try again later',
+                                colour=0xFF0000)
             await ctx.reply(embed=embed)
             return
         player = response.json()
@@ -68,57 +98,57 @@ class Verify(commands.Cog):
                 pass
             else:
                 embed = discord.Embed(title=f'Error',
-                                      description='The discord linked with your hypixel account is not the same as '
-                                                  'the one you are trying to verify with. \n You can connect your '
-                                                  'discord following https://youtu.be/6ZXaZ-chzWI',
-                                      colour=0xFF0000)
+                                    description='The discord linked with your hypixel account is not the same as '
+                                                'the one you are trying to verify with. \n You can connect your '
+                                                'discord following https://youtu.be/6ZXaZ-chzWI',
+                                    colour=0xFF0000)
                 await ctx.reply(embed=embed)
                 return
         except KeyError:
             embed = discord.Embed(title=f'Error',
-                                  description='The discord linked with your hypixel account is not the same as '
-                                              'the one you are trying to verify with. \n You can connect your '
-                                              'discord following https://youtu.be/6ZXaZ-chzWI',
-                                  colour=0xFF0000)
+                                description='The discord linked with your hypixel account is not the same as '
+                                            'the one you are trying to verify with. \n You can connect your '
+                                            'discord following https://youtu.be/6ZXaZ-chzWI',
+                                colour=0xFF0000)
             await ctx.reply(embed=embed)
             return
         insertguild = None
         temptest = False
         try:
             if guild["guild"]["name"] in ["SB Lambda Pi", "SB Theta Tau", "SB Delta Omega", "SB Iota Theta",
-                                          "SB Uni", "SB Rho Xi", "SB Kappa Eta", "SB Alpha Psi", "SB Masters"]:
+                                        "SB Uni", "SB Rho Xi", "SB Kappa Eta", "SB Alpha Psi", "SB Masters"]:
                 pass
         except:
             temptest = True
             embed = discord.Embed(title=f'Verification',
-                                  description='You are not in any of the SBU guilds. You are now verified without '
-                                              'the guild member roles.',
-                                  colour=0x800080)
+                                description='You are not in any of the SBU guilds. You are now verified without '
+                                            'the guild member roles.',
+                                colour=0x800080)
             pass
         if temptest:
             pass
         else:
             if guild["guild"]["name"] in ["SB Lambda Pi", "SB Theta Tau", "SB Delta Omega", "SB Iota Theta",
-                                     "SB Uni", "SB Rho Xi", "SB Kappa Eta", "SB Alpha Psi", "SB Masters"]:
+                                    "SB Uni", "SB Rho Xi", "SB Kappa Eta", "SB Alpha Psi", "SB Masters"]:
                 check = True
                 insertguild = guild["guild"]["name"]
                 pass
             else:
                 embed = discord.Embed(title=f'Verification',
-                                          description='You are not in any of the SBU guilds. You are now verified without '
-                                                      'the guild member roles.',
-                                          colour=0x800080)
+                                        description='You are not in any of the SBU guilds. You are now verified without '
+                                                    'the guild member roles.',
+                                        colour=0x800080)
             temp = False
             if guild["guild"]["name"] == "SB Uni":
                 temp = True
                 guildrole = "SB University Member"
                 embed = discord.Embed(title=f'Verification',
-                                          description=f'You have been verified as a member of {guild["guild"]["name"]}',
-                                          colour=0x008000)
+                                        description=f'You have been verified as a member of {guild["guild"]["name"]}',
+                                        colour=0x008000)
             if check and temp != True:
                 embed = discord.Embed(title=f'Verification',
-                                      description=f'You have been verified as a member of {guild["guild"]["name"]}',
-                                      colour=0x008000)
+                                    description=f'You have been verified as a member of {guild["guild"]["name"]}',
+                                    colour=0x008000)
                 guildrole = guild["guild"]["name"] + " Member"
         conn = psycopg2.connect(
             host=hostname,
@@ -164,9 +194,9 @@ class Verify(commands.Cog):
         cur1.execute('SELECT * FROM VERIFIED')
         member = ctx.message.author
         for role1 in ["SB Lambda Pi Member", "SB Theta Tau Member", "SB Delta Omega Member",
-                      "SB Iota Theta Member",
-                      "SB University Member", "SB Rho Xi Member", "SB Kappa Eta Member", "SB Alpha Psi Member",
-                      "SB Masters Member", "Verified", "MVP", "MVP+", "MVP++", "VIP", "VIP+", "Guild Member"]:
+                    "SB Iota Theta Member",
+                    "SB University Member", "SB Rho Xi Member", "SB Kappa Eta Member", "SB Alpha Psi Member",
+                    "SB Masters Member", "Verified", "MVP", "MVP+", "MVP++", "VIP", "VIP+", "Guild Member"]:
             role = discord.utils.get(ctx.guild.roles, name=role1)
             if role in member.roles:
                 await member.remove_roles(role)
@@ -180,15 +210,15 @@ class Verify(commands.Cog):
                 cur.close()
                 conn.close()
         embed = discord.Embed(title=f'Verification',
-                              description=f'You have been unverified.',
-                              colour=0x008000)
+                            description=f'You have been unverified.',
+                            colour=0x008000)
         await ctx.reply(embed=embed)
 
     @commands.command()
     async def cleanup(self, ctx):
         embed = discord.Embed(title=f'Processing',
-                              description=f'This message will be edited once it has completed running',
-                              colour=0x008000)
+                            description=f'This message will be edited once it has completed running',
+                            colour=0x008000)
         message = await ctx.reply(embed=embed)
         conn = psycopg2.connect(
             host=hostname,

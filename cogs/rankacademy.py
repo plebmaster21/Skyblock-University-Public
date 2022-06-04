@@ -16,11 +16,7 @@ Be generally helpful, kind, and welcoming to all
 This Academy has two sections.
 **Report Guide** - How and when to report someone to our staff that is breaking our rules
 **Kindness Academy** - How to be generally helpful, kind, and welcoming to all
-
-After you are done reading, you will be tested with several open answer questions to make sure you understand what was covered. You may ask questions before testing.
-
-**Once you finish reading all sections of this academy, ping the Moderator role THEN clarify if you've pinged to ask questions OR if you're ready to be tested.**
-**Type done when finished reading**"""
+"""
 senior1 = discord.Embed(
     title='Senior Rank',
     description='',

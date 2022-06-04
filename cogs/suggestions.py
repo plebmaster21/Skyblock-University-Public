@@ -20,7 +20,10 @@ class Suggestions(commands.Cog):
             timestamp=datetime.datetime.utcnow(),
             colour=0x8F49EA
         )
-        suggestembed.set_author(name=f'Suggested by {ctx.message.author}', icon_url=f'{ctx.author.avatar}')
+        if ctx.message.author.avatar == None:
+                suggestembed.set_author(name=f'Suggested by {ctx.message.author}')
+        else:
+            suggestembed.set_author(name=f'Suggested by {ctx.message.author}', icon_url=ctx.message.author.avatar)
         suggestembed.set_footer(text=f'Suggestion number {num1}')
         suggestembed.set_thumbnail(
             url="https://cdn.discordapp.com/avatars/937099605265485936/8a5d786e369fdda9f355f12eaf0487fb.png?size=4096")
@@ -42,8 +45,8 @@ class Suggestions(commands.Cog):
 
         with open('suggestions.json', 'w') as json_file:
             json.dump(listvar, json_file,
-                      indent=4,
-                      separators=(',', ': '))
+                    indent=4,
+                    separators=(',', ': '))
 
     @commands.command()
     @commands.has_role("Council")

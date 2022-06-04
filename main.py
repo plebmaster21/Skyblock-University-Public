@@ -3,21 +3,25 @@ import discord.utils
 import os
 import random
 from discord.ext import commands
+from discord.ext import tasks
 from dotenv import load_dotenv
 import aiohttp
 import asyncio
+import json
 
 # noinspection SpellCheckingInspection
-intents = discord.Intents.all()
-bot = commands.Bot(command_prefix="-", intents=intents)
+intents = discord.Intents().all()
+bot = commands.Bot(command_prefix="+", intents=intents)
 bot.remove_command('help')
 
 
 @bot.event
 async def on_ready():
+	
     print(f"{bot.user} is ready")
+    
 
-
+#bot.load_extension('jishaku')
 @bot.command()
 async def load(ctx, extension):
     if ctx.message.author.id in [462940637595959296, 438529479355400194, 397389995113185293, 665885831856128001]:
@@ -78,6 +82,7 @@ async def help(ctx):
     embed.add_field(name="checkreq", value="Check if you meet reqs for SB Masters \n `+checkreq IGN`", inline=False)
     embed.add_field(name="repgive", value="Give a reputation for a carry \n `+repgive @mention Reason`", inline=False)
     embed.add_field(name="suggest", value="Suggest something \n `+suggest Suggestion`", inline=False)
+    embed.add_field(name="Inactive", value = "`+inactiveadd IGN Time`", inline=False)
     await ctx.send(embed=embed)
 
 
@@ -86,7 +91,7 @@ async def help(ctx):
 async def modhelp(ctx):
     embed = discord.Embed(
         title='Moderation Commands',
-        description='All the moderation commands are     listed below',
+        description='All the moderation commands are listed below',
         colour=discord.Colour.red()
     )
     embed.set_footer(text='SBU Custom Bot')
@@ -98,7 +103,9 @@ async def modhelp(ctx):
     embed.add_field(name="Add a banned member to banned list", value="`+banlist IGN`", inline=False)
     embed.add_field(name="Activate SBU's Crisis Mode", value="`+crisis`", inline=False)
     embed.add_field(name="Deactivate SBU's Crisis Mode", value="`+crisisend`", inline=False)
-
+    embed.add_field(name="Check inactive kicks for a guild", value="`+inactive GUILDNAME`", inline=False)
+    embed.add_field(name="QOTD", value="`+qotdadd QOTD`", inline=False)
+    embed.add_field(name="Inactives", value = "`+inactive GUILD`", inline=False)
     await ctx.send(embed=embed)
 
 
@@ -126,12 +133,9 @@ async def on_message(message):
             await message.reply(list[randommessage[0]])
     elif message.content.upper() == "PINGU":
         if message.author.id in [381494697073573899, 462940637595959296]:
-            list = ["<:poguin:933279319579561986>", "<a:pingupat:932962348908560417>", "UwU"]
+            list = ["<:poguin:933279319579561986>", "<a:pingupat:932962348908560417>", "UwU","https://tenor.com/view/noot-noot-apocalypse-gif-25788876"]
             randommessage = random.sample(range(0, len(list)), 1)
             await message.reply(list[randommessage[0]])
-    elif message.content.upper() == "MELON":
-        if message.author.id in [438529479355400194, 798500372993933332]:
-            await message.reply("ily ash (wyvtrusty best)")
     elif message.content.upper() == "JACK":
         if message.author.id in [358670711109320705, 462940637595959296, 397389995113185293, 438529479355400194]:
             await message.reply("Go play <@909802667495268372> in <#910961553480765440>")
@@ -143,71 +147,20 @@ async def on_message(message):
             await message.reply("Op Ironman")
     elif message.content.upper() == "WINDOW":
         if message.author.id in [797274543042986024]:
-            await message.reply("Door")
+            await message.reply("https://tenor.com/view/monkey-gif-8660294")
     elif message.content.upper() == "PLEB":
         if message.author.id in [519985798393626634, 462940637595959296]:
             await message.reply("shitting on the bw gamers.")
-    elif message.content.upper() == "THUNDXR":
-        if message.author.id in [694604709591384226]:
-            list = ["huh?",
-                    "stop annoying me smh",
-                    "bad at coding",
-                    "edited me",
-                    "stop looking at me",
-                    "is hot",
-                    "is nice",
-                    "what?",
-                    "ITHUNDXR!!!!!",
-                    "IThundxr",
-                    "why?",
-                    "where?",
-                    "HOW?",
-                    "no",
-                    "no.",
-                    "NO",
-                    "No.",
-                    "shut up",
-                    "codes alot",
-                    "Minecraft.",
-                    "oooh you found the special response that does legit nothing. cool?",
-                    "wow",
-                    "is ~~kinda~~ very mean",
-                    "lol"]
-            randommessage = random.sample(range(0, len(list)), 1)
-            await message.reply(list[randommessage[0]])
+    elif message.content.upper() == "MEEP":
+        if message.author.id in [681475158975971329, 462940637595959296]:
+            await message.reply("https://tenor.com/view/meap-phineas-and-ferb-phineas-and-ferb-meap-meep-gif-14038245")
+    elif message.content.upper() == "MEGA":
+        if message.author.id in [675106662302089247, 462940637595959296]:
+            await message.reply("https://tenor.com/view/megalorian-tykhe-gif-24043314")
+    elif message.content.upper() == "HMM":
+        if message.author.id in [283326249735028736]:
+            await message.reply("mhm")
     await bot.process_commands(message)
-
-
-"""@bot.event
-async def updatemember():
-    await bot.wait_until_ready()
-
-    while not bot.is_closed():
-        vc = [945493379599446056,945493468539654205,945493492434604072,945493508398153808
-                  ,945493526047776889,945493540748791899,945493556909473812,945493573263040522]
-        guilds = ["6111fcb48ea8c95240436c57", "604a765e8ea8c962f2bb3b7a",
-                  "607a0d7c8ea8c9c0ff983976", "608d91e98ea8c9925cdb91b7",
-                "60a16b088ea8c9bb7f6d9052", "60b923478ea8c9a3aefbf3dd", "6125800e8ea8c92e1833e851",
-                  "570940fb0cf2d37483e106b3"]
-        total_members = 0
-        for i in range(len(guilds)):
-            async with aiohttp.ClientSession() as session:
-                async with session.get(f'https://api.slothpixel.me/api/guilds/id/{guilds[i]}') as resp:
-                    guildrename = await resp.json()
-            rename = guildrename["name"] + ": " + str(len(guildrename["members"]))
-            total_members = total_members + int(len(guildrename["members"]))
-            vc1 = bot.get_channel(vc[i])
-            await vc1.edit(name=rename)
-        vc2 = bot.get_channel(890288776302190602)
-        rename1 = "Guild members: " + str(total_members)
-        await vc2.edit(name=rename1)
-        channel = bot.get_channel(946591422616838264)
-        await channel.send(f"Guild Stats VC Updated")
-        print("Updated")
-        await asyncio.sleep(1800)
-
-bot.loop.create_task(updatemember())"""
-# noinspection SpellCheckingInspection
 
 load_dotenv()
 bot.run(os.getenv("TOKEN"))
